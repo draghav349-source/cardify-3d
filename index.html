@@ -1,404 +1,75 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cardify 3D Studio</title>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cardify 3D — ID Card Studio</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
 <style>
-*{box-sizing:border-box}
-body{
- margin:0;
- background:#090e19;
- color:white;
- font-family:Arial,sans-serif;
-}
-header{
- padding:20px;
- background:#111a2b;
- border-bottom:1px solid #29364c;
- display:flex;
- justify-content:space-between;
- align-items:center;
-}
-.logo{font-size:23px;font-weight:bold;color:#63a5ff}
-.logo span{color:white}
-.container{
- max-width:1200px;
- margin:auto;
- padding:20px;
-}
-h2{font-size:21px}
-.workspace{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:25px;
-}
-.panel{
- background:#111a2b;
- padding:20px;
- border-radius:15px;
- border:1px solid #29364c;
-}
-label{
- display:block;
- margin:15px 0 7px;
- color:#b9c9df;
- font-size:13px;
-}
-input,select{
- width:100%;
- padding:12px;
- background:#091221;
- color:white;
- border:1px solid #35445c;
- border-radius:8px;
- outline:none;
-}
-button{
- border:0;
- padding:12px 16px;
- border-radius:8px;
- background:#2879ef;
- color:white;
- font-weight:bold;
- cursor:pointer;
- margin:5px 3px;
-}
-button:hover{opacity:.85}
-.secondary{background:#29374d}
-.preview{
- min-height:490px;
- display:flex;
- justify-content:center;
- align-items:center;
- perspective:1000px;
- overflow:hidden;
-}
-.card{
- width:300px;
- height:475px;
- position:relative;
- transform-style:preserve-3d;
- transition:transform .8s;
-}
-.card.flipped{transform:rotateY(180deg)}
-.face{
- position:absolute;
- inset:0;
- backface-visibility:hidden;
- border-radius:17px;
- overflow:hidden;
- box-shadow:0 20px 50px #0009;
-}
-.back{transform:rotateY(180deg)}
-.card-top{
- height:135px;
- background:#174c9b;
- padding:20px;
- text-align:center;
-}
-.card-top h2{margin:8px 0;font-size:22px}
-.card-top p{font-size:11px;letter-spacing:2px}
-.photo{
- width:112px;
- height:112px;
- border-radius:50%;
- border:5px solid white;
- background:#dce5f2;
- object-fit:cover;
- margin:-55px auto 10px;
- display:block;
- position:relative;
-}
-.card-body{
- background:white;
- color:#17243a;
- height:340px;
- text-align:center;
- padding:0 15px;
-}
-.card-body h2{margin:8px 0 4px}
-.role{color:#2879ef;font-size:14px}
-.company{
- margin-top:22px;
- font-weight:bold;
- font-size:17px;
-}
-.details{
- text-align:left;
- padding:12px;
- line-height:2;
- font-size:12px;
-}
-.footer{
- background:#174c9b;
- color:white;
- padding:13px;
- text-align:center;
- font-size:11px;
-}
-.back{
- background:white;
- color:#17243a;
- text-align:center;
- padding:30px 20px;
-}
-.back h2{color:#174c9b}
-#qr{
- display:flex;
- justify-content:center;
- margin:30px auto;
-}
-.back-footer{
- background:#174c9b;
- color:white;
- padding:20px;
- margin-top:30px;
-}
-.templates{
- display:flex;
- flex-wrap:wrap;
- gap:7px;
-}
-.templates button{flex:1}
-@media(max-width:750px){
- .workspace{grid-template-columns:1fr}
- .preview{min-height:510px}
- .container{padding:12px}
-}
+:root{--bg:#080d18;--panel:#111b2d;--line:#263650;--muted:#9aacc5;--card:#174c9b}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 70% 0,#172b49 0,#080d18 55%);color:#eef4ff;font:15px Inter,system-ui,Arial,sans-serif}
+header{height:70px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #263650;background:#0b1424dd;position:sticky;top:0;z-index:5;backdrop-filter:blur(14px)}
+.brand{font-weight:900;font-size:22px;letter-spacing:-.8px}.brand b{color:#72adff}.tag{font-size:11px;letter-spacing:2px;color:#91a8c8}
+main{max-width:1380px;margin:auto;padding:24px}.intro{display:flex;justify-content:space-between;align-items:end;margin-bottom:20px}.intro h1{margin:0;font-size:clamp(24px,4vw,36px);letter-spacing:-1px}.intro p{margin:7px 0 0;color:var(--muted)}
+.layout{display:grid;grid-template-columns:minmax(300px,390px) 1fr;gap:20px}.panel{background:linear-gradient(145deg,#142139,#0e1727);border:1px solid var(--line);border-radius:18px;padding:19px;box-shadow:0 18px 55px #0003}.panel h2{font-size:16px;margin:0 0 16px}.section{border-top:1px solid #263650;padding-top:15px;margin-top:16px}.section:first-of-type{border:0;padding:0;margin:0}
+label{display:block;color:#b8c8df;font-size:12px;margin:12px 0 6px}input,select{width:100%;background:#091322;color:#f5f8ff;border:1px solid #344762;border-radius:9px;padding:11px 12px;outline:none}input:focus,select:focus{border-color:#6daaff}input[type=color]{height:42px;padding:4px}input[type=file]{font-size:12px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.btns{display:flex;flex-wrap:wrap;gap:7px}.btn{border:0;border-radius:9px;padding:10px 13px;background:#2879ed;color:white;font-weight:700;cursor:pointer}.btn.alt{background:#263851;color:#dce9ff}.btn:hover{filter:brightness(1.12)}.small{font-size:11px;color:var(--muted);line-height:1.5}
+.stage{min-height:700px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:radial-gradient(ellipse at 50% 52%,#243b5c 0,#111d30 42%,#0b1423 75%);border-radius:15px}
+.stage:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#ffffff08 1px,transparent 1px),linear-gradient(90deg,#ffffff08 1px,transparent 1px);background-size:32px 32px}
+.scene{position:relative;width:390px;height:610px;display:flex;align-items:center;justify-content:center;perspective:1200px;z-index:1}
+.lanyard{position:absolute;top:0;left:50%;transform:translateX(-50%);width:90px;height:205px;border:15px solid #263f65;border-top:0;border-radius:0 0 38px 38px;filter:drop-shadow(0 9px 5px #0007);z-index:0}
+.lanyard:after{content:"CARDIFY 3D";position:absolute;top:78px;left:-12px;width:84px;text-align:center;font-size:8px;font-weight:900;letter-spacing:2px;color:#d8e7ff;transform:rotate(90deg)}
+.clip{position:absolute;top:174px;left:50%;transform:translateX(-50%);width:32px;height:49px;border:5px solid #aebbd0;border-radius:7px;background:linear-gradient(90deg,#5f6e82,#f4f7ff,#68788f);box-shadow:0 5px 12px #0008;z-index:2}
+.clip:after{content:"";position:absolute;width:13px;height:17px;border:4px solid #aebbd0;border-bottom:0;border-radius:10px 10px 0 0;left:4px;top:-19px}
+.card-wrap{position:absolute;top:218px;transform-style:preserve-3d;transition:transform .18s ease;z-index:3;cursor:grab}.card{width:290px;height:430px;position:relative;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.8,.2,1);filter:drop-shadow(0 24px 28px #0009)}
+.card.flipped{transform:rotateY(180deg)}.face{position:absolute;inset:0;border-radius:17px;overflow:hidden;backface-visibility:hidden;background:#fff;color:#17243a;box-shadow:inset 0 0 0 1px #ffffff55}
+.face.back{transform:rotateY(180deg);padding:25px;text-align:center}.top{height:116px;background:var(--card);color:#fff;padding:18px;text-align:center;position:relative}.top .co{font-size:10px;letter-spacing:2px;font-weight:800}.top h3{font-size:19px;margin:10px 0 0;letter-spacing:1px}
+.card-content{height:314px;text-align:center;padding:0 18px;background:linear-gradient(#fff,#f2f6fc)}.avatar{width:112px;height:112px;object-fit:cover;border-radius:50%;border:5px solid white;background:#dce5f2;margin:-52px auto 9px;display:block;position:relative;box-shadow:0 5px 16px #162c4a30}
+.person{font-size:21px;margin:4px 0;color:#15243b;font-weight:850}.job{font-size:13px;color:var(--card);font-weight:750}.company{font-size:14px;font-weight:850;margin:15px 0 8px}.info{text-align:left;font-size:11px;line-height:2;color:#40516a;padding:8px 4px}.stripe{position:absolute;bottom:0;left:0;right:0;height:36px;background:var(--card);color:#fff;text-align:center;padding:11px;font-size:9px;letter-spacing:2px;font-weight:800}
+#qr{width:126px;height:126px;margin:28px auto 14px;display:flex;align-items:center;justify-content:center}#qr img{margin:auto}.back h3{color:var(--card);letter-spacing:1px}.backbar{position:absolute;bottom:0;left:0;right:0;background:var(--card);color:white;padding:17px;font-size:10px;letter-spacing:2px}
+.templates{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.swatch{height:30px;border-radius:8px;border:2px solid #ffffff50;cursor:pointer}
+@media(max-width:900px){main{padding:14px}.layout{grid-template-columns:1fr}.stage{min-height:660px}.intro{align-items:start;gap:10px;flex-direction:column}}
+@media(max-width:430px){.scene{transform:scale(.88)}header{padding:0 15px}.tag{font-size:9px}}
 </style>
 </head>
-
 <body>
-
-<header>
- <div class="logo">CARDIFY<span> 3D</span></div>
- <div>✦ ID DESIGN STUDIO</div>
-</header>
-
-<div class="container">
-
-<h2>Professional ID Card Designer</h2>
-<p style="color:#8fa4c0">Create • Customize • Visualize • Print</p>
-
-<div class="workspace">
-
-<div class="panel">
-
-<h3>✦ Design Controls</h3>
-
-<label>Full Name</label>
-<input id="name" value="Deepak Sharma" oninput="update()">
-
-<label>Designation</label>
-<input id="role" value="Creative Designer" oninput="update()">
-
-<label>Company / Institution</label>
-<input id="company" value="CARDIFY STUDIO" oninput="update()">
-
-<label>Employee / Student ID</label>
-<input id="empid" value="CF-2026-001" oninput="update()">
-
-<label>Email</label>
-<input id="email" value="hello@example.com" oninput="update()">
-
-<label>Phone</label>
-<input id="phone" value="+91 9876543210" oninput="update()">
-
-<label>Photo Upload</label>
-<input type="file" accept="image/*" onchange="uploadPhoto(event)">
-
-<label>Card Theme</label>
-<div class="templates">
-<button onclick="theme('#174c9b')">Blue</button>
-<button onclick="theme('#111827')">Dark</button>
-<button onclick="theme('#087e65')">Green</button>
-<button onclick="theme('#772b91')">Purple</button>
+<header><div class="brand">CARDIFY <b>3D</b></div><div class="tag">DESIGN • CUSTOMIZE • VISUALIZE • PRINT</div></header>
+<main>
+<div class="intro"><div><h1>3D ID Card Studio</h1><p>Create professional employee, student, event and visitor badges.</p></div><span class="small">VERSION 2.0 • INTERACTIVE EDITOR</span></div>
+<div class="layout">
+<aside class="panel">
+<h2>✦ Design workspace</h2>
+<div class="section">
+<div class="row"><div><label>Card category</label><select id="category"><option>EMPLOYEE ID CARD</option><option>STUDENT ID CARD</option><option>EVENT ACCESS PASS</option><option>VISITOR PASS</option></select></div><div><label>Orientation</label><select id="orientation"><option value="portrait">Portrait</option><option value="landscape">Landscape</option></select></div></div>
+<label>Full name</label><input id="name" value="Alex Morgan">
+<label>Designation / Class</label><input id="role" value="Creative Designer">
+<label>Company / Institution</label><input id="company" value="CARDIFY STUDIO">
+<div class="row"><div><label>ID number</label><input id="empid" value="CF-2026-001"></div><div><label>Phone</label><input id="phone" value="+91 9876543210"></div></div>
+<label>Email</label><input id="email" value="hello@example.com">
 </div>
-
-<label>Templates</label>
-<div class="templates">
-<button class="secondary" onclick="template('employee')">Employee</button>
-<button class="secondary" onclick="template('student')">Student</button>
-<button class="secondary" onclick="template('event')">Event</button>
-<button class="secondary" onclick="template('visitor')">Visitor</button>
-</div>
-
-<br>
-<button onclick="flip()">↻ Flip Card</button>
-<button onclick="downloadCard()">⬇ Download PNG</button>
-
-</div>
-
-<div class="panel">
-
-<h3>✦ Live 3D Preview</h3>
-
-<div class="preview">
-
-<div class="card" id="card">
-
-<div class="face front">
-
-<div class="card-top" id="top">
-<p id="topCompany">CARDIFY STUDIO</p>
-<h2 id="cardHeading">IDENTITY CARD</h2>
-</div>
-
-<div class="card-body">
-
-<img class="photo" id="photo"
-src="https://placehold.co/300x300/e2e8f0/334155?text=PHOTO">
-
-<h2 id="cardName">Deepak Sharma</h2>
-<div class="role" id="cardRole">Creative Designer</div>
-
-<div class="company" id="cardCompany">CARDIFY STUDIO</div>
-
-<div class="details">
-<div>ID: <span id="cardId">CF-2026-001</span></div>
-<div>Phone: <span id="cardPhone">+91 9876543210</span></div>
-<div>Email: <span id="cardEmail">hello@example.com</span></div>
-</div>
-
-</div>
-
-<div class="footer">OFFICIAL IDENTITY CARD</div>
-
-</div>
-
-<div class="face back">
-
-<h2>IDENTITY DETAILS</h2>
-<p id="backCompany">CARDIFY STUDIO</p>
-
-<div id="qr"></div>
-
-<p id="backId">CF-2026-001</p>
-
-<div class="back-footer">
-OFFICIAL CARD<br><br>
-CARDIFY 3D STUDIO
-</div>
-
-</div>
-
-</div>
-</div>
-
-<p style="text-align:center;color:#8fa4c0">
-Tap Flip Card to see the back side.
-</p>
-
-</div>
-</div>
-</div>
-
+<div class="section"><h2>✦ Upload assets</h2><label>Profile photo</label><input id="photoFile" type="file" accept="image/*"><label>Company logo</label><input id="logoFile" type="file" accept="image/*"><p class="small">Use a clear portrait and transparent PNG logo for best results.</p></div>
+<div class="section"><h2>✦ Appearance</h2><label>Theme presets</label><div class="templates"><button class="swatch" style="background:#174c9b" onclick="setTheme('#174c9b')"></button><button class="swatch" style="background:#111827" onclick="setTheme('#111827')"></button><button class="swatch" style="background:#087e65" onclick="setTheme('#087e65')"></button><button class="swatch" style="background:#772b91" onclick="setTheme('#772b91')"></button><button class="swatch" style="background:#b7791f" onclick="setTheme('#b7791f')"></button><button class="swatch" style="background:#be3455" onclick="setTheme('#be3455')"></button><button class="swatch" style="background:#1e6b72" onclick="setTheme('#1e6b72')"></button><button class="swatch" style="background:#344054" onclick="setTheme('#344054')"></button></div><label>Custom theme color</label><input id="customColor" type="color" value="#174c9b" onchange="setTheme(this.value)"><div class="btns"><button class="btn alt" onclick="setTheme('#174c9b')">Modern</button><button class="btn alt" onclick="setTheme('#344054')">Minimal</button><button class="btn alt" onclick="setTheme('#772b91')">Bold</button><button class="btn alt" onclick="setTheme('#087e65')">Classic</button></div></div>
+<div class="section"><h2>✦ Export & preview</h2><div class="btns"><button class="btn" onclick="flipCard()">↻ Flip front/back</button><button class="btn alt" onclick="resetView()">Reset view</button></div><div class="btns"><button class="btn" onclick="downloadPNG()">⬇ Download PNG</button><button class="btn alt" onclick="window.print()">Print / Save PDF</button></div><p class="small">Drag the preview to rotate the hanging badge. PNG export captures the selected side. Print / Save PDF opens your device print dialog.</p></div>
+</aside>
+<section class="panel"><h2>✦ Live 3D preview <span class="small">DRAG TO ROTATE</span></h2><div class="stage" id="stage"><div class="scene"><div class="lanyard"></div><div class="clip"></div><div class="card-wrap" id="cardWrap"><div class="card" id="card">
+<div class="face front" id="front"><div class="top" id="top"><img id="logoPreview" style="max-width:65px;max-height:30px;object-fit:contain;display:none;margin:0 auto 4px"><div class="co" id="topCompany">CARDIFY STUDIO</div><h3 id="heading">EMPLOYEE ID CARD</h3></div><div class="card-content"><img class="avatar" id="avatar" src="https://placehold.co/300x300/e2e8f0/334155?text=PHOTO"><div class="person" id="previewName">Alex Morgan</div><div class="job" id="previewRole">Creative Designer</div><div class="company" id="previewCompany">CARDIFY STUDIO</div><div class="info"><div>ID: <span id="previewId">CF-2026-001</span></div><div>PHONE: <span id="previewPhone">+91 9876543210</span></div><div>EMAIL: <span id="previewEmail">hello@example.com</span></div></div></div><div class="stripe">OFFICIAL IDENTITY CARD</div></div>
+<div class="face back" id="back"><h3>IDENTITY DETAILS</h3><p id="backCompany">CARDIFY STUDIO</p><div id="qr"></div><strong id="backId">CF-2026-001</strong><p class="small">If found, please return this card to the issuing organization.</p><div class="backbar">CARDIFY 3D • AUTHORIZED ACCESS</div></div>
+</div></div></div><div class="btns" style="justify-content:center;margin-top:12px"><button class="btn alt" onclick="rotate(-15)">↶ Rotate</button><button class="btn alt" onclick="rotate(15)">Rotate ↷</button><button class="btn alt" onclick="flipCard()">Flip 180°</button></div></section>
+</div></main>
 <script>
-
-let cardColor="#174c9b";
-
-function update(){
-
-const val=id=>document.getElementById(id).value;
-
-document.getElementById("cardName").innerText=val("name");
-document.getElementById("cardRole").innerText=val("role");
-document.getElementById("cardCompany").innerText=val("company");
-document.getElementById("topCompany").innerText=val("company");
-document.getElementById("backCompany").innerText=val("company");
-document.getElementById("cardId").innerText=val("empid");
-document.getElementById("backId").innerText=val("empid");
-document.getElementById("cardEmail").innerText=val("email");
-document.getElementById("cardPhone").innerText=val("phone");
-
-makeQR();
-
-}
-
-function theme(color){
-cardColor=color;
-document.getElementById("top").style.background=color;
-document.querySelector(".footer").style.background=color;
-document.querySelector(".back-footer").style.background=color;
-}
-
-function flip(){
-document.getElementById("card").classList.toggle("flipped");
-}
-
-function uploadPhoto(event){
-const file=event.target.files[0];
-if(!file)return;
-const reader=new FileReader();
-reader.onload=e=>{
-document.getElementById("photo").src=e.target.result;
-};
-reader.readAsDataURL(file);
-}
-
-function template(type){
-
-const data={
-employee:["EMPLOYEE ID CARD","Professional Employee"],
-student:["STUDENT ID CARD","Student"],
-event:["EVENT ACCESS PASS","Event Participant"],
-visitor:["VISITOR PASS","Guest"]
-};
-
-document.getElementById("cardHeading").innerText=data[type][0];
-document.getElementById("role").value=data[type][1];
-update();
-
-}
-
-function makeQR(){
-
-const box=document.getElementById("qr");
-box.innerHTML="";
-
-new QRCode(box,{
-text:JSON.stringify({
-name:document.getElementById("name").value,
-id:document.getElementById("empid").value,
-company:document.getElementById("company").value
-}),
-width:125,
-height:125
-});
-
-}
-
-async function downloadCard(){
-
-const card=document.getElementById("card");
-const wasFlipped=card.classList.contains("flipped");
-
-if(wasFlipped)card.classList.remove("flipped");
-
-await new Promise(resolve=>setTimeout(resolve,300));
-
-const canvas=await html2canvas(
-card.querySelector(".front"),
-{scale:3,useCORS:true,backgroundColor:null}
-);
-
-const link=document.createElement("a");
-link.download="Cardify-ID-Card.png";
-link.href=canvas.toDataURL("image/png");
-link.click();
-
-if(wasFlipped)card.classList.add("flipped");
-
-}
-
-update();
-
+const $=id=>document.getElementById(id);let rx=-7,ry=-12,flipped=false;
+function update(){let v=id=>$(id).value;$('previewName').textContent=v('name');$('previewRole').textContent=v('role');$('previewCompany').textContent=v('company');$('topCompany').textContent=v('company');$('backCompany').textContent=v('company');$('previewId').textContent=v('empid');$('backId').textContent=v('empid');$('previewPhone').textContent=v('phone');$('previewEmail').textContent=v('email');$('heading').textContent=v('category');makeQR()}
+['name','role','company','empid','phone','email','category'].forEach(id=>$(id).addEventListener('input',update));
+$('orientation').addEventListener('change',()=>{$('card').style.width=$('orientation').value==='landscape'?'390px':'290px';$('card').style.height=$('orientation').value==='landscape'?'250px':'430px';$('top').style.height=$('orientation').value==='landscape'?'100%':'116px';$('top').style.width=$('orientation').value==='landscape'?'39%':'100%';$('top').style.float=$('orientation').value==='landscape'?'left':'none';$('cardContentFix','noop')});
+function setTheme(c){document.documentElement.style.setProperty('--card',c);$('customColor').value=c}
+function makeQR(){if(!$('qr'))return;$('qr').innerHTML='';new QRCode($('qr'),{text:JSON.stringify({name:$('name').value,id:$('empid').value,company:$('company').value}),width:120,height:120})}
+function flipCard(){flipped=!flipped;$('card').classList.toggle('flipped',flipped)}
+function rotate(n){ry+=n;applyRotation()}function applyRotation(){$('cardWrap').style.transform='rotateX('+rx+'deg) rotateY('+ry+'deg)'}function resetView(){rx=-7;ry=-12;applyRotation()}
+let drag=false,lx=0,ly=0;const stage=$('stage');stage.addEventListener('pointerdown',e=>{drag=true;lx=e.clientX;ly=e.clientY;stage.setPointerCapture(e.pointerId)});stage.addEventListener('pointermove',e=>{if(!drag)return;ry+=(e.clientX-lx)*.65;rx=Math.max(-45,Math.min(45,rx-(e.clientY-ly)*.45));lx=e.clientX;ly=e.clientY;applyRotation()});stage.addEventListener('pointerup',()=>drag=false);stage.addEventListener('pointercancel',()=>drag=false);
+function readImage(file,target){if(!file)return;let r=new FileReader();r.onload=e=>$(target).src=e.target.result;r.readAsDataURL(file)}
+$('photoFile').addEventListener('change',e=>readImage(e.target.files[0],'avatar'));$('logoFile').addEventListener('change',e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=x=>{$('logoPreview').src=x.target.result;$('logoPreview').style.display='block'};r.readAsDataURL(f)});
+async function downloadPNG(){let node=flipped?$('back'):$('front');try{let canvas=await html2canvas(node,{scale:3,useCORS:true,backgroundColor:'#fff'});let a=document.createElement('a');a.download='Cardify-'+(flipped?'Back':'Front')+'.png';a.href=canvas.toDataURL('image/png');a.click()}catch(e){alert('PNG export failed. Please retry after the preview finishes loading.')}}
+update();applyRotation();
 </script>
-
-</body>
-</html>
+</body></html>

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cardify 3D Studio</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ background:#090e19;
+ color:white;
+ font-family:Arial,sans-serif;
+}
+header{
+ padding:20px;
+ background:#111a2b;
+ border-bottom:1px solid #29364c;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+}
+.logo{font-size:23px;font-weight:bold;color:#63a5ff}
+.logo span{color:white}
+.container{
+ max-width:1200px;
+ margin:auto;
+ padding:20px;
+}
+h2{font-size:21px}
+.workspace{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:25px;
+}
+.panel{
+ background:#111a2b;
+ padding:20px;
+ border-radius:15px;
+ border:1px solid #29364c;
+}
+label{
+ display:block;
+ margin:15px 0 7px;
+ color:#b9c9df;
+ font-size:13px;
+}
+input,select{
+ width:100%;
+ padding:12px;
+ background:#091221;
+ color:white;
+ border:1px solid #35445c;
+ border-radius:8px;
+ outline:none;
+}
+button{
+ border:0;
+ padding:12px 16px;
+ border-radius:8px;
+ background:#2879ef;
+ color:white;
+ font-weight:bold;
+ cursor:pointer;
+ margin:5px 3px;
+}
+button:hover{opacity:.85}
+.secondary{background:#29374d}
+.preview{
+ min-height:490px;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ perspective:1000px;
+ overflow:hidden;
+}
+.card{
+ width:300px;
+ height:475px;
+ position:relative;
+ transform-style:preserve-3d;
+ transition:transform .8s;
+}
+.card.flipped{transform:rotateY(180deg)}
+.face{
+ position:absolute;
+ inset:0;
+ backface-visibility:hidden;
+ border-radius:17px;
+ overflow:hidden;
+ box-shadow:0 20px 50px #0009;
+}
+.back{transform:rotateY(180deg)}
+.card-top{
+ height:135px;
+ background:#174c9b;
+ padding:20px;
+ text-align:center;
+}
+.card-top h2{margin:8px 0;font-size:22px}
+.card-top p{font-size:11px;letter-spacing:2px}
+.photo{
+ width:112px;
+ height:112px;
+ border-radius:50%;
+ border:5px solid white;
+ background:#dce5f2;
+ object-fit:cover;
+ margin:-55px auto 10px;
+ display:block;
+ position:relative;
+}
+.card-body{
+ background:white;
+ color:#17243a;
+ height:340px;
+ text-align:center;
+ padding:0 15px;
+}
+.card-body h2{margin:8px 0 4px}
+.role{color:#2879ef;font-size:14px}
+.company{
+ margin-top:22px;
+ font-weight:bold;
+ font-size:17px;
+}
+.details{
+ text-align:left;
+ padding:12px;
+ line-height:2;
+ font-size:12px;
+}
+.footer{
+ background:#174c9b;
+ color:white;
+ padding:13px;
+ text-align:center;
+ font-size:11px;
+}
+.back{
+ background:white;
+ color:#17243a;
+ text-align:center;
+ padding:30px 20px;
+}
+.back h2{color:#174c9b}
+#qr{
+ display:flex;
+ justify-content:center;
+ margin:30px auto;
+}
+.back-footer{
+ background:#174c9b;
+ color:white;
+ padding:20px;
+ margin-top:30px;
+}
+.templates{
+ display:flex;
+ flex-wrap:wrap;
+ gap:7px;
+}
+.templates button{flex:1}
+@media(max-width:750px){
+ .workspace{grid-template-columns:1fr}
+ .preview{min-height:510px}
+ .container{padding:12px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+ <div class="logo">CARDIFY<span> 3D</span></div>
+ <div>✦ ID DESIGN STUDIO</div>
+</header>
+
+<div class="container">
+
+<h2>Professional ID Card Designer</h2>
+<p style="color:#8fa4c0">Create • Customize • Visualize • Print</p>
+
+<div class="workspace">
+
+<div class="panel">
+
+<h3>✦ Design Controls</h3>
+
+<label>Full Name</label>
+<input id="name" value="Deepak Sharma" oninput="update()">
+
+<label>Designation</label>
+<input id="role" value="Creative Designer" oninput="update()">
+
+<label>Company / Institution</label>
+<input id="company" value="CARDIFY STUDIO" oninput="update()">
+
+<label>Employee / Student ID</label>
+<input id="empid" value="CF-2026-001" oninput="update()">
+
+<label>Email</label>
+<input id="email" value="hello@example.com" oninput="update()">
+
+<label>Phone</label>
+<input id="phone" value="+91 9876543210" oninput="update()">
+
+<label>Photo Upload</label>
+<input type="file" accept="image/*" onchange="uploadPhoto(event)">
+
+<label>Card Theme</label>
+<div class="templates">
+<button onclick="theme('#174c9b')">Blue</button>
+<button onclick="theme('#111827')">Dark</button>
+<button onclick="theme('#087e65')">Green</button>
+<button onclick="theme('#772b91')">Purple</button>
+</div>
+
+<label>Templates</label>
+<div class="templates">
+<button class="secondary" onclick="template('employee')">Employee</button>
+<button class="secondary" onclick="template('student')">Student</button>
+<button class="secondary" onclick="template('event')">Event</button>
+<button class="secondary" onclick="template('visitor')">Visitor</button>
+</div>
+
+<br>
+<button onclick="flip()">↻ Flip Card</button>
+<button onclick="downloadCard()">⬇ Download PNG</button>
+
+</div>
+
+<div class="panel">
+
+<h3>✦ Live 3D Preview</h3>
+
+<div class="preview">
+
+<div class="card" id="card">
+
+<div class="face front">
+
+<div class="card-top" id="top">
+<p id="topCompany">CARDIFY STUDIO</p>
+<h2 id="cardHeading">IDENTITY CARD</h2>
+</div>
+
+<div class="card-body">
+
+<img class="photo" id="photo"
+src="https://placehold.co/300x300/e2e8f0/334155?text=PHOTO">
+
+<h2 id="cardName">Deepak Sharma</h2>
+<div class="role" id="cardRole">Creative Designer</div>
+
+<div class="company" id="cardCompany">CARDIFY STUDIO</div>
+
+<div class="details">
+<div>ID: <span id="cardId">CF-2026-001</span></div>
+<div>Phone: <span id="cardPhone">+91 9876543210</span></div>
+<div>Email: <span id="cardEmail">hello@example.com</span></div>
+</div>
+
+</div>
+
+<div class="footer">OFFICIAL IDENTITY CARD</div>
+
+</div>
+
+<div class="face back">
+
+<h2>IDENTITY DETAILS</h2>
+<p id="backCompany">CARDIFY STUDIO</p>
+
+<div id="qr"></div>
+
+<p id="backId">CF-2026-001</p>
+
+<div class="back-footer">
+OFFICIAL CARD<br><br>
+CARDIFY 3D STUDIO
+</div>
+
+</div>
+
+</div>
+</div>
+
+<p style="text-align:center;color:#8fa4c0">
+Tap Flip Card to see the back side.
+</p>
+
+</div>
+</div>
+</div>
+
+<script>
+
+let cardColor="#174c9b";
+
+function update(){
+
+const val=id=>document.getElementById(id).value;
+
+document.getElementById("cardName").innerText=val("name");
+document.getElementById("cardRole").innerText=val("role");
+document.getElementById("cardCompany").innerText=val("company");
+document.getElementById("topCompany").innerText=val("company");
+document.getElementById("backCompany").innerText=val("company");
+document.getElementById("cardId").innerText=val("empid");
+document.getElementById("backId").innerText=val("empid");
+document.getElementById("cardEmail").innerText=val("email");
+document.getElementById("cardPhone").innerText=val("phone");
+
+makeQR();
+
+}
+
+function theme(color){
+cardColor=color;
+document.getElementById("top").style.background=color;
+document.querySelector(".footer").style.background=color;
+document.querySelector(".back-footer").style.background=color;
+}
+
+function flip(){
+document.getElementById("card").classList.toggle("flipped");
+}
+
+function uploadPhoto(event){
+const file=event.target.files[0];
+if(!file)return;
+const reader=new FileReader();
+reader.onload=e=>{
+document.getElementById("photo").src=e.target.result;
+};
+reader.readAsDataURL(file);
+}
+
+function template(type){
+
+const data={
+employee:["EMPLOYEE ID CARD","Professional Employee"],
+student:["STUDENT ID CARD","Student"],
+event:["EVENT ACCESS PASS","Event Participant"],
+visitor:["VISITOR PASS","Guest"]
+};
+
+document.getElementById("cardHeading").innerText=data[type][0];
+document.getElementById("role").value=data[type][1];
+update();
+
+}
+
+function makeQR(){
+
+const box=document.getElementById("qr");
+box.innerHTML="";
+
+new QRCode(box,{
+text:JSON.stringify({
+name:document.getElementById("name").value,
+id:document.getElementById("empid").value,
+company:document.getElementById("company").value
+}),
+width:125,
+height:125
+});
+
+}
+
+async function downloadCard(){
+
+const card=document.getElementById("card");
+const wasFlipped=card.classList.contains("flipped");
+
+if(wasFlipped)card.classList.remove("flipped");
+
+await new Promise(resolve=>setTimeout(resolve,300));
+
+const canvas=await html2canvas(
+card.querySelector(".front"),
+{scale:3,useCORS:true,backgroundColor:null}
+);
+
+const link=document.createElement("a");
+link.download="Cardify-ID-Card.png";
+link.href=canvas.toDataURL("image/png");
+link.click();
+
+if(wasFlipped)card.classList.add("flipped");
+
+}
+
+update();
+
+</script>
+
+</body>
+</html>
